@@ -15,7 +15,7 @@ const verify = (req, res, next) => {
       return next(error);
     }
     req.user = decoded;
-    next();
+   return next(err);
   });
 };
 

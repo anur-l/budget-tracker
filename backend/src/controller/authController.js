@@ -1,7 +1,8 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const queries = require("../database/scripts");
-const db = require("../config/db")
+const db = require("../config/db");
+
 function validRegister(username, email, password) {
   if (username.length < 3 || username.length > 30)
     return { success: false, msg: "username must be between 3 and 30" };
@@ -101,11 +102,11 @@ const login = async (req, res, next) => {
     return next(error);
   }
   const token = jwt.sign(
-    { username: user.username, email: user.email },
+    { username: user.username, id: user.id, email: user.email },
     process.env.JWT_SECRET,
     { expiresIn: "24h" },
   );
   res.status(200).json({ message: "Login successful", token });
 };
 
-module.exports = { register,login };
+module.exports = { register, login };
