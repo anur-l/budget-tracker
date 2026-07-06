@@ -1,12 +1,11 @@
 const express = require("express");
 require("dotenv").config();
+const authRouter = require("./src/route/authRoute")
+const port = process.env.PORT || 5000;
 
 const app = express();
-const port = process.env.port || 5000;
-
-app.get("/", (req, res) => {
-  res.json({ message: "budget api is running" });
-});
+app.use(express.json());
+app.use("/",authRouter)
 
 app.listen(port, () => {
   console.log(`server running on port ${port}`);
