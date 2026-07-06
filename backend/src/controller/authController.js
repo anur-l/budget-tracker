@@ -1,6 +1,7 @@
 const bcrypt = require("bcryptjs");
-const db = require("../config/db");
+const jwt = require("jsonwebtoken");
 const queries = require("../database/scripts");
+const db = require("../config/db")
 function validRegister(username, email, password) {
   if (username.length < 3 || username.length > 30)
     return { success: false, msg: "username must be between 3 and 30" };
@@ -70,10 +71,41 @@ const register = async (req, res, next) => {
       user: insertResult.rows[0],
     });
   } catch (error) {
-      console.error("register error", error);
-      error.status = 500;
-      return next(error);
+    console.error("register error", error);
+    error.status = 500;
+    return next(error);
   }
 };
 
-module.exports = { register };
+const login = async (req, res, next) => {
+  const { email, password } = req.body;
+  if (!email || !password) {
+    const error = new Error("Fill the email and password");
+    error.status = 400;
+    return next(error);
+  }
+
+  const userResult = await db.query(queries.sqlfindEmail, [email]);
+  if (userResult.rows.length === 0) {
+    const error = new Error("Invalid email or password");
+    error.status = 400;
+    return next(error);
+  }
+
+  const user = userResult.rows[0];
+  const verifyPassword = await bcrypt.compare(password, user.password);
+
+  if (!verifyPassword) {
+    const error = new Error("Incorrect password, try again");
+    error.status = 400;
+    return next(error);
+  }
+  const token = jwt.sign(
+    { username: user.username, email: user.email },
+    process.env.JWT_SECRET,
+    { expiresIn: "24h" },
+  );
+  res.status(200).json({ message: "Login successful", token });
+};
+
+module.exports = { register,login };
