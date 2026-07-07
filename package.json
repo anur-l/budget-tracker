@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "npm run dev --workspace=backend & npm run dev --workspace=frontend",
+    "dev": "npm run backend & npm run frontend",
     "backend": "cd backend && npm run dev",
     "frontend": "cd frontend && npm run dev"
   },
