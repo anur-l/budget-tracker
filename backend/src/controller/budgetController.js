@@ -1,19 +1,22 @@
 const db = require("../config/db");
 const queries = require("../database/scripts");
 
-const getbudgetbyId = async (req, res, next) => {
+const getBudget = async (req, res, next) => {
   try {
     const id = req.user.id;
-    const results = await db.query(queries.sqlFindUserIdBudget, [id]);
+    const results = await db.query(queries.sqlFindUserIdTransaction, [id]);
+
     if (results.rows.length === 0) {
-      return res.status(400).json({ msg: "No data currently" });
+      return res.status(200).json({ msg: "No data currently" });
     }
+
     const results_budget = await db.query(queries.sqlSumCategory, [id]);
+
     return res
       .status(200)
       .json({ data: results.rows, summary: results_budget.rows });
   } catch (error) {
-    console.error("Internal server error ", error);
+    console.error("GET error: ", error);
     next(error);
   }
 };
@@ -42,7 +45,7 @@ const addBudget = async (req, res, next) => {
       error.status = 400;
       return next(error);
     }
-    if (!(/^\d{4}-\d{2}-\d{2}$/.test(date))) {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) {
       const error = new Error("Correct should be format YYYY-MM-DD");
       error.status = 400;
       return next(error);
@@ -76,11 +79,42 @@ const addBudget = async (req, res, next) => {
       description,
       date,
     ]);
+
     return res.status(201).json({ success: true, data: results.rows });
   } catch (error) {
-    console.error("Internal server error ", error);
+    console.error("POST error: ", error);
     next(error);
   }
 };
 
-module.exports = { getbudgetbyId, addBudget };
+const deleteBudget = async (req, res, next) => {
+  try {
+    const transactionId = parseInt(req.params.id);
+    const id = req.user.id;
+
+    if (isNaN(transactionId) || transactionId <= 0) {
+      const error = new Error("Invalid transaction ID");
+      error.status = 400;
+      return next(error);
+    }
+    const checkId = await db.query(queries.sqlFindTransactionId, [
+      transactionId,
+      id,
+    ]);
+
+    if (checkId.rows.length === 0) {
+      const error = new Error("Transaction not found");
+      error.status = 404;
+      return next(error);
+    }
+    await db.query(queries.sqlDeleteTransaction, [transactionId, id]);
+
+    res
+      .status(200)
+      .json({ success: "Successfully deleted", data: checkId.rows });
+  } catch (error) {
+    console.error("DELETE error: ", error);
+    next(error);
+  }
+};
+module.exports = { getBudget, addBudget, deleteBudget };

@@ -4,7 +4,8 @@ const verify = require("../middleware/auth")
 
 const budgetRouther = Router();
 
-budgetRouther.get("/",verify ,budgetController.getbudgetbyId);
-budgetRouther.post("/",verify,budgetController.addBudget)
+budgetRouther.get("/",verify ,budgetController.getBudget);
+budgetRouther.post("/",verify,budgetController.addBudget);
+budgetRouther.delete("/:id",verify,budgetController.deleteBudget);
 
 module.exports = budgetRouther;
