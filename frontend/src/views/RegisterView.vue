@@ -3,7 +3,7 @@ import { ref } from "vue";
 import { useRouter } from "vue-router";
 import api from "@/utils/axios";
 import InputField from "@/components/InputField.vue";
-
+import NavLink from "@/components/NavLink.vue";
 const router = useRouter();
 const email = ref("");
 const password = ref("");
@@ -15,14 +15,12 @@ const handleRegister = async () => {
   try {
     error.value = "";
     loading.value = true;
-    const res = await api.post("/auth/register", {
+    await api.post("/auth/register", {
       email: email.value,
       password: password.value,
       username: username.value,
     });
 
-    localStorage.setItem("token", res.data.token);
-    localStorage.setItem("user", JSON.stringify(res.data.user));
     router.push("/login");
   } catch (err) {
     error.value = err.response?.data?.message || "Register failed";
@@ -32,6 +30,16 @@ const handleRegister = async () => {
 };
 </script>
 <template>
+  <nav>
+    <div class="bg-green-300 flex px-3 py-2 justify-between items-center">
+      <span class="text-green-800 font-bold ml-2">💰 Budget Tracker</span>
+
+      <ul class="flex gap-1.5">
+        <li><NavLink to="/" text="Home" /></li>
+        <li><NavLink to="/login" text="Login" /></li>
+      </ul>
+    </div>
+  </nav>
   <section
     class="flex items-center justify-center p-4 sm:p-6 bg-green-50 min-h-screen"
   >

@@ -1,5 +1,5 @@
 import axios from "axios";
-
+import router from "@/router";
 const api = axios.create({
   baseURL: "http://localhost:5000/api",
   headers: {
@@ -24,10 +24,10 @@ api.interceptors.response.use(
     if (error.response?.status === 401) {
       localStorage.removeItem("token");
       localStorage.removeItem("user");
-      window.location.href = "/login";
+      router.push("/login");
     }
     return Promise.reject(error);
   },
 );
 
-export default api
+export default api;
