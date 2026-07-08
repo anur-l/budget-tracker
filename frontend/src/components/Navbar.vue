@@ -4,13 +4,12 @@ import NavLink from "./NavLink.vue";
 
 <template>
   <nav>
-    <div class="bg-emerald-600 flex px-3 py-2 justify-end-safe">
-
-
+    <div class="bg-green-300 flex px-3 py-2 justify-end">
       <ul class="flex gap-1.5">
         <li><NavLink to="/" text="Home" /></li>
-        <li><NavLink to="/register" text="Register" /></li>
-        <li><NavLink to="/dashboard" text="Dashboard" /></li>
+        <li><NavLink to="/login" text="Login" /></li>
+        <!-- <li><NavLink to="/register" text="Register" /></li> -->
+        <!-- <li><NavLink to="/dashboard" text="Dashboard" /></li> -->
       </ul>
     </div>
   </nav>
