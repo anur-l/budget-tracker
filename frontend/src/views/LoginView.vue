@@ -52,7 +52,7 @@ const handleLogin = async () => {
             v-model="password"
           />
         </div>
-        <div v-if="error" class="text-red-500 text-sm">{{ error }}</div>
+        <div v-if="error" class="text-red-500 text-sm sm:text-base font">{{ error }}</div>
         <button
           type="submit"
           :disabled="loading"
