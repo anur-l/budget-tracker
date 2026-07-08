@@ -15,11 +15,16 @@ Homeview
           Track your income and expenses easily.
         </p>
 
-        <div>
+        <div class="flex flex-col gap-1.5">
           <router-link
             to="/login"
             class="bg-green-600 px-10 py-3 rounded-lg hover:bg-green-400 text-white font-medium transition"
             >Login</router-link
+          >
+          <router-link
+            to="/register"
+            class="bg-green-600 px-10 py-3 rounded-lg hover:bg-green-400 text-white font-medium transition"
+            >Register</router-link
           >
         </div>
       </div>

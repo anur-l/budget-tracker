@@ -8,7 +8,7 @@ import NavLink from "./NavLink.vue";
       <ul class="flex gap-1.5">
         <li><NavLink to="/" text="Home" /></li>
         <li><NavLink to="/login" text="Login" /></li>
-        <!-- <li><NavLink to="/register" text="Register" /></li> -->
+        <li><NavLink to="/register" text="Register" /></li>
         <!-- <li><NavLink to="/dashboard" text="Dashboard" /></li> -->
       </ul>
     </div>
