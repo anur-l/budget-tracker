@@ -2,6 +2,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const authModel = require("../model/authModel");
 const validRegister = require("../validators/authValidator");
+const logger = require("../middleware/logger");
 
 const register = async (req, res, next) => {
   try {
@@ -45,11 +46,15 @@ const register = async (req, res, next) => {
       passwordHash,
     );
 
+    logger.info(`New user registered successfully: ${username}`);
     res.status(201).json({
       success: true,
       user: insertResult,
     });
   } catch (error) {
+    logger.error(
+      `Registration crash: ${error.message} for email: ${req.body?.email}`,
+    );
     console.error("register error", error);
     error.status = 500;
     return next(error);
@@ -66,6 +71,7 @@ const login = async (req, res, next) => {
 
   const userResult = await authModel.findEmail(email.trim().toLowerCase());
   if (userResult.length === 0) {
+    logger.warn(`Auth failed: No account for ${email}`);
     const error = new Error("Invalid email or password");
     error.status = 401;
     return next(error);
@@ -74,6 +80,7 @@ const login = async (req, res, next) => {
   const verifyPassword = await bcrypt.compare(password, user.password);
 
   if (!verifyPassword) {
+    logger.warn(`Auth failed: Wrong pass for user ${user.username}`);
     const error = new Error("Incorrect password, try again");
     error.status = 401;
     return next(error);
@@ -83,6 +90,7 @@ const login = async (req, res, next) => {
     process.env.JWT_SECRET,
     { expiresIn: "24h" },
   );
+  logger.info(`User login success: ${user.username}`);
   res.status(200).json({
     success: true,
     msg: "Login successful",

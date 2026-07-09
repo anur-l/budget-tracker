@@ -1,6 +1,8 @@
+import AnalyisView from "@/views/AnalyisView.vue";
 import DashboardView from "@/views/DashboardView.vue";
 import HomeView from "@/views/HomeView.vue";
 import LoginView from "@/views/LoginView.vue";
+import NotFoundView from "@/views/NotFoundView.vue";
 import RegisterView from "@/views/RegisterView.vue";
 import { createRouter, createWebHistory } from "vue-router";
 
@@ -16,6 +18,17 @@ const router = createRouter({
       component: DashboardView,
       meta: { requiresAuth: true },
     },
+    {
+      path: "/analysis",
+      name: "Summary",
+      component: AnalyisView,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: "/:pathMatch(.*)*",
+      name: "NotFound",
+      component: NotFoundView,
+    },
   ],
 });
 
@@ -25,7 +38,7 @@ router.beforeEach((to) => {
   if (to.meta.requiresAuth && !isLogIn) {
     return "/login";
   } else if ((to.path === "/login" || to.path === "/register") && isLogIn) {
-    return "/dashboard"
+    return "/dashboard";
   }
 });
 

@@ -1,8 +1,8 @@
-const {Router} = require("express")
-const auth = require("../controller/authController")
+const { Router } = require("express");
+const auth = require("../controller/authController");
 const authRouter = Router();
+const { loginLimiter } = require("../middleware/rateLimiter");
+authRouter.post("/register", loginLimiter, auth.register);
+authRouter.post("/login", loginLimiter, auth.login);
 
-authRouter.post("/register",auth.register);
-authRouter.post("/login",auth.login);
-
-module.exports = authRouter
+module.exports = authRouter;

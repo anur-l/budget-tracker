@@ -19,4 +19,5 @@ CREATE TABLE IF NOT EXISTS transactions  (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE INDEX IF NOT EXISTS idx_transactions_date ON transactions(date);
 CREATE INDEX IF NOT EXISTS idx_transactions_user_id ON transactions(user_id);

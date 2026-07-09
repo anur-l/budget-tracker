@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "npm run backend & npm run frontend",
     "backend": "cd backend && npm run dev",
-    "frontend": "cd frontend && npm run dev"
+    "frontend": "cd frontend && npm run dev",
+    "install-all": "cd backend && npm install && cd ../frontend && npm install"
   },
   "keywords": [],
   "author": "",

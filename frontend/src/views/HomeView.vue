@@ -12,7 +12,7 @@ const { isLogIn } = useAuth();
       <ul class="flex gap-1.5">
         <li><NavLink to="/dashboard" text="Dashboard" /></li>
         <li>
-          <LogoutButton/>
+          <LogoutButton />
         </li>
       </ul>
     </div>
